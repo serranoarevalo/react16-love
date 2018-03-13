@@ -1,4 +1,4 @@
-# React 16 ❤️
+# React 16 🎩
 
 React 16 came a while ago but it came with some very cool features that very few people use nowadays.
 
