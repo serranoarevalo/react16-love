@@ -32,14 +32,69 @@ class Fragments extends Component {
   }
 }
 
+/*
+  Portals:
+    As you know React needs to mount on a div inside of the HTML.
+    But what happens if you want to render something outisde of that div where you mounted?
+    Portals baby, portals.
+*/
+
+class Portals extends Component {
+  state = {
+    message: "just did BIACH"
+  };
+  render() {
+    return createPortal(
+      <Message message={this.state.message} />,
+      document.getElementById("untouchable")
+    );
+  }
+}
+
 const Message = ({ message }) => <h3>{message}</h3>;
 
-class App extends Component {
+/*
+  Error Boundaries:
+    When your component produces an error, is not cool to kill the whole app.
+    Let's catch the errors so we can look more pro.
+*/
+
+class ErrorMaker extends Component {
+  state = {
+    isFetching: true
+  };
+  componentDidMount = () => {
+    setTimeout(() => this.setState({ isFetching: false }), 2000);
+  };
   render() {
+    const { isFetching } = this.state;
+    if (isFetching) {
+      return "Fetching data";
+    } else {
+      throw new Error("shit");
+    }
+  }
+}
+
+const ErrorFallback = () => "Some error happened we all died";
+
+class App extends Component {
+  state = {
+    hasError: false
+  };
+  componentDidCatch(error, info) {
+    this.setState({
+      hasError: true
+    });
+  }
+  render() {
+    const { hasError } = this.state;
     return (
       <Fragment>
         <Strings />
         <Fragments />
+        <Portals />
+        {hasError ? <ErrorFallback /> : <ErrorMaker />}
       </Fragment>
     );
   }
