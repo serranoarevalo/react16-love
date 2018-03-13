@@ -6,5 +6,5 @@ Here we take a look at:
 
 * Return types: Fragments and Strings
 * Portals
-* Error Boundaries
+* Error Boundaries with HOC
 * `null` and `setState`

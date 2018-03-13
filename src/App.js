@@ -79,25 +79,37 @@ class ErrorMaker extends Component {
 const ErrorFallback = () => "Some error happened we all died";
 
 class App extends Component {
-  state = {
-    hasError: false
-  };
-  componentDidCatch(error, info) {
-    this.setState({
-      hasError: true
-    });
-  }
   render() {
-    const { hasError } = this.state;
     return (
       <Fragment>
         <Strings />
         <Fragments />
         <Portals />
-        {hasError ? <ErrorFallback /> : <ErrorMaker />}
+        <ErrorMaker />
       </Fragment>
     );
   }
 }
 
-export default App;
+const HOCErrorBoundary = MyComponent =>
+  class ErrorBoundary extends Component {
+    state = {
+      hasError: false
+    };
+    componentDidCatch = (error, info) => {
+      console.log(error, info);
+      this.setState({
+        hasError: true
+      });
+    };
+    render() {
+      const { hasError } = this.state;
+      if (hasError) {
+        return <ErrorFallback />;
+      } else {
+        return <MyComponent />;
+      }
+    }
+  };
+
+export default HOCErrorBoundary(App);
