@@ -78,19 +78,6 @@ class ErrorMaker extends Component {
 
 const ErrorFallback = () => "Some error happened we all died";
 
-class App extends Component {
-  render() {
-    return (
-      <Fragment>
-        <Strings />
-        <Fragments />
-        <Portals />
-        <ErrorMaker />
-      </Fragment>
-    );
-  }
-}
-
 const HOCErrorBoundary = MyComponent =>
   class ErrorBoundary extends Component {
     state = {
@@ -111,5 +98,49 @@ const HOCErrorBoundary = MyComponent =>
       }
     }
   };
+
+const MAX_PIZZAS = 20;
+
+const eatPizza = (state, props) => {
+  const { pizzas } = state;
+  if (pizzas < MAX_PIZZAS) {
+    return {
+      pizzas: pizzas + 1
+    };
+  } else {
+    return null;
+  }
+};
+
+class Controlling extends Component {
+  state = {
+    pizzas: 0
+  };
+  render() {
+    const { pizzas } = this.state;
+    return (
+      <button onClick={this._handleClick}>
+        I have eaten {pizzas} {pizzas === 1 ? "pizza" : "pizzas"}
+      </button>
+    );
+  }
+  _handleClick = () => {
+    this.setState(eatPizza);
+  };
+}
+
+class App extends Component {
+  render() {
+    return (
+      <Fragment>
+        <Strings />
+        <Fragments />
+        <Portals />
+        {/*<ErrorMaker />*/}
+        <Controlling />
+      </Fragment>
+    );
+  }
+}
 
 export default HOCErrorBoundary(App);
